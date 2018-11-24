@@ -3,7 +3,6 @@ from twisted.internet.defer import inlineCallbacks, Deferred
 
 @inlineCallbacks
 def my_callbacks():
-    from twisted.internet import reactor
 
     print 'first callback'
     result = yield 1 # yielded values that aren't deferred come right back

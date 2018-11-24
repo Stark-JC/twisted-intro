@@ -52,6 +52,15 @@ class Getter:
         self.d.addCallbacks(self._toHTML, self.pass_through, errbackArgs=['to_html'])
         return self.d
 
+def double(arg):
+    return arg*2
+
+def block(arg):
+    d = defer.Deferred()
+    d.addCallback(double)
+    reactor.callLater(2, d.callback, 233)
+    return d
+
 def cbPrintData(result):
     print(result)
 
@@ -64,6 +73,8 @@ g = Getter()
 d = g.getDummyData(3)
 d.addCallbacks(cbPrintData,g.pass_through, errbackArgs=['cbPrintData'])
 d.addCallbacks(g.pass_through, ebPrintError, callbackArgs=['cbPrintError'])
+d.addBoth(block)
+d.addCallbacks(cbPrintData,g.pass_through, errbackArgs=['cbPrintData'])
 
 # this series of callbacks and errbacks will print "Result: 12"
 # g = Getter()
@@ -71,5 +82,4 @@ d.addCallbacks(g.pass_through, ebPrintError, callbackArgs=['cbPrintError'])
 # d.addCallbacks(cbPrintData,g.pass_through, errbackArgs=['cbPrintData'])
 # d.addCallbacks(g.pass_through, ebPrintError, callbackArgs=['cbPrintError'])
 
-reactor.callLater(4, reactor.stop)
 reactor.run()
