@@ -46,7 +46,11 @@ for that to work.
 
 
 def get_poetry(sockets):
-    """Download poety from all the given sockets."""
+    """Download poety from all the given sockets.
+    1.使用select函数等待所有Socket，直到至少有一个socket有数据到来。
+    2.对每个有数据需要读取的socket，从中读取数据。但仅仅只是读取有效数据，不能为了等待还没来到的数据而发生阻塞。（和同步模式的相比，就是把等待服务器传过来的时间用于接收其他服务器的数据了）
+    3.重复前两步，直到所有的socket被关闭。
+    """
 
     poems = dict.fromkeys(sockets, '') # socket -> accumulated poem
 
@@ -68,7 +72,7 @@ def get_poetry(sockets):
         for sock in rlist:
             data = ''
 
-            while True:
+            while True: #当从服务器中读取数据时，会尽量多地从Sockt读取数据直到它阻塞为止，然后读下一个Sockt接收的数据（如果有数据接收的话）。
                 try:
                     new_data = sock.recv(1024)
                 except socket.error, e:

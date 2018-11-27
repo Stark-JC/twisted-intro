@@ -1,3 +1,4 @@
+# coding=utf-8
 # This is the Twisted Get Poetry Now! client, version 4.0
 
 import optparse, sys
@@ -71,7 +72,7 @@ class PoetryClientFactory(ClientFactory):
 
     def poem_finished(self, poem):
         if self.deferred is not None:
-            d, self.deferred = self.deferred, None
+            d, self.deferred = self.deferred, None # 保证了重复调用不会出错
             d.callback(poem)
 
     def clientConnectionFailed(self, connector, reason):

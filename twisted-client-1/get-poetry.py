@@ -67,6 +67,7 @@ class PoetrySocket(object):
 
     def fileno(self):
         try:
+            print(111)
             return self.sock.fileno()
         except socket.error:
             return -1

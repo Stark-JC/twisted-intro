@@ -1,3 +1,4 @@
+# -*-coding:utf-8 -*-
 # This is the Twisted Get Poetry Now! client, version 6.0
 
 import optparse, sys
@@ -51,7 +52,6 @@ ports for that to work.
 
 
 class PoetryProtocol(Protocol):
-
     poem = ''
 
     def dataReceived(self, data):
@@ -65,7 +65,6 @@ class PoetryProtocol(Protocol):
 
 
 class PoetryClientFactory(ClientFactory):
-
     protocol = PoetryProtocol
 
     def __init__(self, deferred):
@@ -84,7 +83,7 @@ class PoetryClientFactory(ClientFactory):
 
 class TransformClientProtocol(NetstringReceiver):
 
-    def connectionMade(self):
+    def connectionMade(self):  # 只要连接一旦建立我们就发出格式转换服务的请求。
         self.sendRequest(self.factory.xform_name, self.factory.poem)
 
     def sendRequest(self, xform_name, poem):
@@ -99,13 +98,12 @@ class TransformClientProtocol(NetstringReceiver):
 
 
 class TransformClientFactory(ClientFactory):
-
     protocol = TransformClientProtocol
 
     def __init__(self, xform_name, poem):
         self.xform_name = xform_name
         self.poem = poem
-        self.deferred = defer.Deferred()
+        self.deferred = defer.Deferred() #一个对象创建了一个deferred，那么它应当负责激活它。
 
     def handlePoem(self, poem):
         d, self.deferred = self.deferred, None
@@ -164,7 +162,7 @@ def poetry_main():
         d = proxy.xform('cummingsify', poem)
 
         def fail(err):
-            print >>sys.stderr, 'Cummingsify failed!'
+            print >> sys.stderr, 'Cummingsify failed!'
             return poem
 
         return d.addErrback(fail)
@@ -174,7 +172,7 @@ def poetry_main():
         poems.append(poem)
 
     def poem_failed(err):
-        print >>sys.stderr, 'The poem download failed.'
+        print >> sys.stderr, 'The poem download failed.'
         errors.append(err)
 
     def poem_done(_):

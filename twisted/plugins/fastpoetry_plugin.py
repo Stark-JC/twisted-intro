@@ -21,7 +21,6 @@ class PoetryProtocol(Protocol):
 
 
 class PoetryFactory(ServerFactory):
-
     protocol = PoetryProtocol
 
     def __init__(self, service):
@@ -43,20 +42,17 @@ class PoetryService(service.Service):
 # our command-line options.
 
 class Options(usage.Options):
-
     optParameters = [
         ['port', 'p', 10000, 'The port number to listen on.'],
         ['poem', None, None, 'The file containing the poem.'],
         ['iface', None, 'localhost', 'The interface to listen on.'],
-        ]
+    ]
+
 
 # Now we define our 'service maker', an object which knows
 # how to construct our service.
-
+@implements(service.IServiceMaker, IPlugin)
 class PoetryServiceMaker(object):
-
-    implements(service.IServiceMaker, IPlugin)
-
     tapname = "fastpoetry"
     description = "A fast poetry service."
     options = Options
@@ -73,6 +69,7 @@ class PoetryServiceMaker(object):
         tcp_service.setServiceParent(top_service)
 
         return top_service
+
 
 # This variable name is irrelevent. What matters is that
 # instances of PoetryServiceMaker implement IServiceMaker

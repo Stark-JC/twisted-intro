@@ -16,13 +16,13 @@ def second_outer_callback(res):
 def outer_errback(err):
     print 'outer errback got:', err
 
-outer_d = defer.Deferred(cancel_outer)
+outer_d = defer.Deferred(cancel_outer) # 注册canceller
 inner_d = defer.Deferred(cancel_inner)
 
 outer_d.addCallback(first_outer_callback)
 outer_d.addCallbacks(second_outer_callback, outer_errback)
 
-outer_d.callback('result')
+outer_d.callback('result') # 只会执行一轮，遇到deferred了就返回了
 
 # at this point the outer deferred has fired, but is paused
 # on the inner deferred.

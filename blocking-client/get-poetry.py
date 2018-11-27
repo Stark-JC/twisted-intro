@@ -80,7 +80,7 @@ def main():
 
     elapsed = datetime.timedelta()
 
-    for i, address in enumerate(addresses):
+    for i, address in enumerate(addresses): # 每个迭代都是完成一个服务器一首诗的所有下载工作。
         addr_fmt = format_address(address)
 
         print 'Task %d: get poetry from: %s' % (i + 1, addr_fmt)

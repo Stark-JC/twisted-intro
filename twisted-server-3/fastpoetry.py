@@ -36,7 +36,7 @@ class PoetryService(service.Service):
 
 
 # configuration parameters
-port = 10000
+port = 10006
 iface = 'localhost'
 poetry_file = 'poetry/ecstasy.txt'
 

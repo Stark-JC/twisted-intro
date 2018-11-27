@@ -1,3 +1,4 @@
+# coding=utf-8
 # This is the Twisted Poetry Proxy, version 1.0
 
 import optparse
@@ -52,7 +53,7 @@ to proxy the poem for the server running on port 10000.
 class PoetryProxyProtocol(Protocol):
 
     def connectionMade(self):
-        d = maybeDeferred(self.factory.service.get_poem)
+        d = maybeDeferred(self.factory.service.get_poem) # 封装返回值为deferred
         d.addCallback(self.transport.write)
         d.addBoth(lambda r: self.transport.loseConnection())
 
@@ -125,9 +126,9 @@ class ProxyService(object):
 def main():
     options, server_addr = parse_args()
 
-    service = ProxyService(*server_addr)
+    service = ProxyService(*server_addr) # 传入诗歌服务器的地址
 
-    factory = PoetryProxyFactory(service)
+    factory = PoetryProxyFactory(service)# 监听的协议工厂有一个服务
 
     from twisted.internet import reactor
 
